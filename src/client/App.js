@@ -33,7 +33,7 @@ export default class App extends Component {
             id: this.state.posts.length + 1,
             text: this.state.postContent,
             user: {
-                avatar: '/uploads/avatar1.png',
+                avatar: '/uploads/pictureDavidO.png',
                 username: 'Fake User'
             }
         };

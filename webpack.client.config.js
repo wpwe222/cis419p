@@ -32,7 +32,7 @@ module.exports = {
     ,
     devServer: {
 
-            allowedHosts: [ 'ec2-35-165-41-220.us-west-2.compute.amazonaws.com'],
+            allowedHosts: 'all',
 
             port: 3000,
         open: true

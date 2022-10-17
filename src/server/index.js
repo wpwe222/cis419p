@@ -19,7 +19,7 @@ const root = path.join(__dirname, '../../');
 
 const app = express();
 app.use(compress());
-if(process.env.NODE_ENV === 'production') {
+if(process.env.NODE_ENV === 'development') {
   app.use(helmet());
   app.use(helmet.contentSecurityPolicy({
     directives: {
@@ -32,10 +32,10 @@ if(process.env.NODE_ENV === 'production') {
   app.use(helmet.referrerPolicy({ policy: 'same-origin' }));
 }
 app.use(cors());
-app.use('/', express.static(path.join(root, 'dist/client')));
-app.use('/uploads', express.static(path.join(root, 'uploads')));
+app.use('/', express.static(path.join(root, 'src/client')));
+app.use('public/uploads', express.static(path.join(root, 'public/uploads')));
 app.get('/', (req, res) => {
-  res.sendFile(path.join(root, '/dist/client/index.html'));
+  res.sendFile(path.join(root, '/public/index.html'));
 });
 const serviceNames = Object.keys(services);
 

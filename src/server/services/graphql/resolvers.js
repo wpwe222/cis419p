@@ -38,6 +38,37 @@ export default function resolver() {
       },
     },
     RootQuery: {
+	postsFeed(root, { page, limit }, context) {
+
+  var skip = 0;
+
+  if(page && limit) {
+
+    skip = page * limit;
+
+  }
+
+  var query = {
+
+    order: [['createdAt', 'DESC']],
+
+    offset: skip,
+
+  };
+
+  if(limit) {
+
+    query.limit = limit;
+
+  }
+
+  return {
+
+   posts: Post.findAll(query)
+
+  };
+
+},    
       posts(root, args, context) {
         return Post.findAll({
           order: [

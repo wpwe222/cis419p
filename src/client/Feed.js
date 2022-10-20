@@ -1,21 +1,24 @@
 import React, { useState } from 'react';
 import { gql, useQuery, useMutation } from '@apollo/client';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import Post from './components/post';
+import { GET_POSTS } from './apollo/queries/getPosts';
 
-const GET_POSTS = gql`
-    query postsFeed($page: Int, $limit: Int) {
-        postsFeed(page: $page, limit: $limit) {
-            posts {
-                id
-                text
-                user {
-                    avatar
-                    username
-                }
-            }
-        }
-    }
-`;
+
+//const GET_POSTS = gql`
+  //  query postsFeed($page: Int, $limit: Int) {
+    //    postsFeed(page: $page, limit: $limit) {
+      //      posts {
+        //        id
+          //      text
+            //    user {
+              //      avatar
+                //    username
+                //}
+           // }
+       // }
+   // }
+//`;
 
 const ADD_POST = gql`
     mutation addPost($post : PostInput!) {
@@ -111,7 +114,7 @@ const Feed = () => {
     };
 
     if (loading) return 'Loading...';
-    if (error) return `Error! ${error.message}`;
+    if (error) return <Error><p>{error.message}</p></Error>;
 
     const { postsFeed } = data;
     const { posts } = postsFeed;
@@ -132,13 +135,7 @@ const Feed = () => {
                     loader={<div className="loader" key={"loader"}>Loading ...</div>}
                 >
                     {posts.map((post, i) =>
-                        <div key={post.id} className={'post ' + (post.id < 0 ? 'optimistic': '')}>
-                            <div className="header">
-                                <img src={post.user.avatar} />
-                                <h2>{post.user.username}</h2>
-                            </div>
-                            <p className="content">{post.text}</p>
-                        </div>
+                        <Post key={post.id} post={post} />
                     )}
                 </InfiniteScroll>
             </div>

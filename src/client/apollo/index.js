@@ -28,7 +28,7 @@ const client = new ApolloClient({
 
     new HttpLink({
 
-	    uri: 'http://ec2-3-139-88-139.us-east-2.compute.amazonaws.com:8000/graphql',
+	    uri: 'http://ec2-3-14-145-239.us-east-2.compute.amazonaws.com:8000/graphql',
 
     }),
 

@@ -47,6 +47,11 @@ const typeDefinitions = `
   type UsersSearch {
     users: [User]
   }
+  type Auth {
+    token: String
+  }
+
+
   type RootMutation {
     addPost (
       post: PostInput!
@@ -60,6 +65,10 @@ const typeDefinitions = `
     deletePost (
       postId: Int!
     ): Response
+    login (
+      email: String!
+      password: String!
+    ): Auth
   }
   schema {
     query: RootQuery

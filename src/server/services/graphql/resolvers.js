@@ -1,5 +1,7 @@
 import logger from '../../helpers/logger';
 import Sequelize from 'sequelize';
+import bcrypt from 'bcrypt';
+import JWT from 'jsonwebtoken';
 const Op = Sequelize.Op;
 
 export default function resolver() {

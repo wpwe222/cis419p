@@ -12,6 +12,8 @@ import './components/fontawesome';
 import '../../assets/css/style.css';
 import 'cropperjs/dist/cropper.css';
 
+//testing git
+
 const App = ({ client }) => {
     const [loggedIn, setLoggedIn] = useState(!!localStorage.getItem('jwt'));
     const { data, error, loading, refetch } = useCurrentUserQuery();

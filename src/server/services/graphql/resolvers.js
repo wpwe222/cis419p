@@ -2,6 +2,20 @@ import logger from '../../helpers/logger';
 import Sequelize from 'sequelize';
 import bcrypt from 'bcrypt';
 import JWT from 'jsonwebtoken';
+
+
+import aws from 'aws-sdk';
+require('dotenv').config();
+const GraphQLUpload = require('graphql-upload/GraphQLUpload.js')
+
+const s3 = new aws.S3({
+  signatureVersion: 'v4',
+  apiVersion:'latest',
+  region: 'us-east-2',
+  accessKeyId: process.env.AWS_ACCESS_KEY,
+  secretAccessKey:process.env.AWS_SECRET_ACCESS_KEY
+});
+
 const Op = Sequelize.Op;
 const {
   JWT_SECRET
@@ -19,6 +33,7 @@ export default function resolver() {
   } = db.models;
 
   const resolvers = {
+    Upload: GraphQLUpload,
     Post: {
       user(post, args, context) {
         return post.getUser();
@@ -183,12 +198,7 @@ export default function resolver() {
                 const token = JWT.sign({
                   email,
                   id: newUser.id
-                }, 
-
-
-
-"Asdadfafasdfasdfsadfsadfsadfasdfasdfasddddddddddddddddddddddddddddsadffffffffffvadfadfasdfasssssssss1231231231231231321231231231"
-
+                }, "Asdadfafasdfasdfsadfsadfsadfasdfasdfasddddddddddddddddddddddddddddsadffffffffffvadfadfasdfasssssssss1231231231231231321231231231"
 , {
                   expiresIn: '1d'
                 });
@@ -219,12 +229,7 @@ export default function resolver() {
             const token = JWT.sign({
               email,
               id: user.id
-            }, 
-
-
-"Asdadfafasdfasdfsadfsadfsadfasdfasdfasddddddddddddddddddddddddddddsadffffffffffvadfadfasdfasssssssss1231231231231231321231231231"
-
-
+            }, "Asdadfafasdfasdfsadfsadfsadfasdfasdfasddddddddddddddddddddddddddddsadffffffffffvadfadfasdfasssssssss1231231231231231321231231231"
 , {
               expiresIn: '1d'
             });
@@ -272,6 +277,38 @@ export default function resolver() {
               return newMessage;
             });
           });
+        });
+      },
+      async uploadAvatar(root, {
+        file
+      }, context) {
+        const {
+          createReadStream,
+          filename,
+          mimetype,
+          encoding
+        } = await file;
+        const bucket = 'wpw-cis419';
+        const params = {
+          Bucket: bucket,
+          Key: context.user.id + '/' + filename,
+          ACL: 'public-read',
+          Body: createReadStream()
+        };
+
+        const response = await s3.upload(params).promise();
+
+        return User.update({
+          avatar: response.Location
+        }, {
+          where: {
+            id: context.user.id
+          }
+        }).then(() => {
+          return {
+            filename: filename,
+            url: response.Location
+          }
         });
       },
       addPost(root, {

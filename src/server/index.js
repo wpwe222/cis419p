@@ -5,7 +5,7 @@ import cors from 'cors';
 import compress from 'compression';
 //import services from './services';
 import servicesLoader from './services';
-
+const graphqlUploadExpress = require('graphql-upload/graphqlUploadExpress.js');
 import db from './database';
 
 const utils = {
@@ -44,6 +44,7 @@ for (let i = 0; i < serviceNames.length; i += 1) {
   if (name === 'graphql') {
     (async () => {
       await services[name].start();
+	app.use(graphqlUploadExpress());
       services[name].applyMiddleware({ app });
     })();
   } else {

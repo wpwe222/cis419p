@@ -10,6 +10,7 @@ import Loading from './components/loading';
 import { withApollo } from '@apollo/client/react/hoc';
 import './components/fontawesome';
 import '../../assets/css/style.css';
+import 'cropperjs/dist/cropper.css';
 
 const App = ({ client }) => {
     const [loggedIn, setLoggedIn] = useState(!!localStorage.getItem('jwt'));

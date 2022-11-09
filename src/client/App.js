@@ -14,7 +14,7 @@ import 'cropperjs/dist/cropper.css';
 import Router from './router';
 
 
-//testing git
+//testing git #2 
 
 const App = ({ client }) => {
     const [loggedIn, setLoggedIn] = useState(!!localStorage.getItem('jwt'));

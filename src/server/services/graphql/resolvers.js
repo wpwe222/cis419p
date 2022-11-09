@@ -102,9 +102,22 @@ export default function resolver() {
           users: User.findAll(query)
         };
       },
+	user(root, { username }, context) {
+
+  return User.findOne({
+
+    where: {
+
+      username: username
+
+    }
+
+  });
+
+},
       postsFeed(root, {
         page,
-        limit
+        limit,username
       }, context) {
         var skip = 0;
 
@@ -122,6 +135,13 @@ export default function resolver() {
         if (limit) {
           query.limit = limit;
         }
+	if(username) {
+
+  query.include = [{model: User}];
+
+  query.where = { '$User.username$': username };
+
+}
 
         return {
           posts: Post.findAll(query)

@@ -11,6 +11,8 @@ import { withApollo } from '@apollo/client/react/hoc';
 import './components/fontawesome';
 import '../../assets/css/style.css';
 import 'cropperjs/dist/cropper.css';
+import Router from './router';
+
 
 //testing git
 
@@ -50,14 +52,7 @@ const App = ({ client }) => {
                 <title>Graphbook - Feed</title>
                 <meta name="description" content="Newsfeed of all your friends on Graphbook" />
             </Helmet>
-            {loggedIn && (
-                <div>
-                    <Bar changeLoginState={handleLogin} />
-                    <Feed />
-                </div>
-            )}
-            {!loggedIn && <LoginRegisterForm changeLoginState={handleLogin} />}
-            {!loggedIn && error && <Error><p>{error.message}</p></Error>}
+            <Router loggedIn={loggedIn} changeLoginState={handleLogin}/>
         </div>
     )
 }

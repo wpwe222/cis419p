@@ -1,61 +1,79 @@
 const typeDefinitions = `
   directive @auth on QUERY | FIELD_DEFINITION | FIELD
   scalar Upload
-  type User {
-    id: Int
-    avatar: String
-    username: String
-    email: String
+
+  type File {
+    filename: String!
+    mimetype: String!
+    encoding: String!
+    url: String!
   }
+
   type Post {
     id: Int
     text: String
     user: User
   }
+
+  type User {
+    id: Int
+    avatar: String
+    username: String
+  }
+
   type Message {
     id: Int
     text: String
     chat: Chat
     user: User
   }
+
   type Chat {
     id: Int
     messages: [Message]
-    users: [User]
     lastMessage: Message
+    users: [User]
   }
+
   type PostFeed {
     posts: [Post]
   }
-  type File {
-    filename: String!
-    url: String!
+
+  type RootQuery {
+    user(username: String!): User @auth
+    currentUser: User @auth
+    posts: [Post]
+    chats: [Chat] @auth
+    chat(chatId: Int): Chat
+    postsFeed(page: Int, limit: Int, username: String): PostFeed @auth
+    usersSearch(page: Int, limit: Int, text: String!): UsersSearch
   }
+
   input PostInput {
     text: String!
   }
-  
-  input UserInput {
-    username: String!
-    avatar: String!
-  }
+
   input ChatInput {
     users: [Int]
   }
+
   input MessageInput {
     text: String!
     chatId: Int!
   }
+
   type Response {
     success: Boolean
   }
+
   type UsersSearch {
     users: [User]
   }
+
   type Auth {
     token: String
   }
-  
+
   type RootMutation {
     addPost (
       post: PostInput!
@@ -66,10 +84,6 @@ const typeDefinitions = `
     addMessage (
       message: MessageInput!
     ): Message
-    updatePost (
-      post: PostInput!
-      postId: Int!
-    ): Post
     deletePost (
       postId: Int!
     ): Response
@@ -85,16 +99,9 @@ const typeDefinitions = `
     uploadAvatar (
       file: Upload!
     ): File @auth
+    logout: Response @auth
   }
-  type RootQuery {
-    posts: [Post]
-    chats: [Chat]
-    chat(chatId: Int): Chat
-    postsFeed(page: Int, limit: Int, username: String): PostFeed @auth
-    user(username: String!): User @auth
-    usersSearch(page: Int, limit: Int, text: String!): UsersSearch
-    currentUser: User @auth
-  }
+
   schema {
     query: RootQuery
     mutation: RootMutation

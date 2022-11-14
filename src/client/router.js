@@ -1,12 +1,20 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
+import { BrowserRouter, StaticRouter, Route, Redirect, Switch } from 'react-router-dom';
 import LoginRegisterForm from './components/loginregister';
 import Main from './Main';
 import User from './User';
 
-export const routing = ({ changeLoginState, loggedIn }) => {
+let Router;
+if(typeof window !== typeof undefined) {
+  Router = BrowserRouter;
+}
+else {
+  Router = StaticRouter;
+}
+
+export const routing = ({ changeLoginState, loggedIn, context, location }) => {
   return (
-    <Router>
+    <Router context={context} location={location}>
       <Switch>
         <PrivateRoute path="/app" component={() => <Main changeLoginState={changeLoginState} />} loggedIn={loggedIn}/>
         <PrivateRoute path="/user/:username" component={props => <User {...props} changeLoginState={changeLoginState}/>} loggedIn={loggedIn}/>
